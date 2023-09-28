@@ -46,11 +46,15 @@ const storeDatabase = () => {
           </ul>
         </aside>
       </Pane>
-      <Pane v-if="frontmatter.playground">
-        <Playground v-model:query="query" ref="playgoundRef" @loaded="() => storeDatabase()"></Playground>
-      </Pane>
-      <Pane class="vp-doc">
-        <Content />
+      <Pane>
+        <Splitpanes class="root" vertical>
+          <Pane v-if="frontmatter.playground">
+            <Playground v-model:query="query" ref="playgoundRef" @loaded="() => storeDatabase()"></Playground>
+          </Pane>
+          <Pane class="vp-doc">
+            <Content />
+          </Pane>
+        </Splitpanes>
       </Pane>
     </Splitpanes>
   </div>
