@@ -79,7 +79,7 @@ export const registerCompletionItemProvider = (monaco: typeof Monaco) => {
 
       return {
         suggestions: __SQL_LANGUAGE_COMPLETE__KEYWORDS__.concat(__SQL_LANGUAGE_COMPLETE__FUNCTIONS__).map(e => ({
-          range: new window.monaco.Range(
+          range: new monaco.Range(
             position.lineNumber,
             position.column - 1,  // 補完候補を挿入する位置のカラム
             position.lineNumber,
