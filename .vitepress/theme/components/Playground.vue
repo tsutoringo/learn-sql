@@ -1,16 +1,23 @@
 <script lang="ts" setup>
 import { Editor } from '@guolao/vue-monaco-editor';
 import { Splitpanes, Pane } from 'splitpanes';
-import { computed, reactive } from 'vue';
-import type { Database, QueryExecResult } from 'sql.js';
+import { computed, onMounted, onUnmounted, reactive, ref } from 'vue';
+import type { Database, QueryExecResult, SqlJsStatic } from 'sql.js';
+
+import { setupMonacoEditor } from '../composable/setupMonacoEditor';
+import { setupSql } from '../composable/setupSql';
+import { provideLoadingStatus } from '../composable/loadingStatus';
 
 const props = defineProps<{
-  query: string,
-  database: Database
+  query: string
 }>();
 
+const sql = ref<SqlJsStatic | null>(null);
+const database = ref<Database | null>(null);
+
 const emit = defineEmits<{
-  'update:query': [ value: string ]
+  'update:query': [ value: string ],
+  loaded: []
 }>();
 
 const query = computed<string>({
@@ -28,10 +35,37 @@ const last = reactive<{
   error: null
 });
 
-const runQuery = () => {
-  last.query = query.value;
+const {
+  setLoadingStatus,
+  endLoading,
+  loading
+} = provideLoadingStatus();
+
+
+onMounted(() => {
+  // TODO: Chainを作成する
+  setLoadingStatus('MonacoEditorをセットアップ中');
+  setupMonacoEditor().then(() => {
+    setLoadingStatus('SQLをセットアップ中');
+    return setupSql();
+  }).then((loadedSql) => {
+    sql.value = loadedSql;
+    database.value = new sql.value.Database();
+    endLoading();
+    emit('loaded');
+  });
+});
+
+onUnmounted(() => {
+  database.value?.close();
+});
+
+const execQuery = (incomingQuery: string) => {
+  if (!database.value) throw new Error('Dont run query before complete setup.');
+
+  last.query = incomingQuery;
   try {
-    last.result = props.database.exec(last.query);
+    last.result = database.value.exec(last.query);
     last.error = null;
   } catch (error) {
     last.result = null;
@@ -39,17 +73,27 @@ const runQuery = () => {
   }
 }
 
+defineExpose({
+  loading,
+  execQuery
+});
+
 </script>
 
 <template>
-  <Splitpanes class="playground" horizontal>
+  <div class="playground">
+    <template v-if="loading.now">
+
+    </template>
+    <template v-else>
+      <Splitpanes horizontal>
         <Pane class="editor">
           <Splitpanes vertical>
             <Pane>
               <Editor v-model:value="query" language="sql" theme="vs-dark" />
             </Pane>
           </Splitpanes>
-          <div class="run-btn" @click="() => runQuery()">
+          <div class="run-btn" @click="() => execQuery(query)">
             <span>▶</span>
           </div>
         </Pane>
@@ -85,11 +129,13 @@ const runQuery = () => {
           </div>
         </Pane>
       </Splitpanes>
+    </template>
+  </div>
 </template>
 
 <style lang="scss" scoped>
 .playground {
-
+  height: 100%;
   .editor {
     position: relative;
     .run-btn {

@@ -1,11 +1,9 @@
 <script lang="ts">
 import { Splitpanes, Pane } from 'splitpanes';
-import { useData } from './composable/data';
-import { onMounted, ref } from 'vue';
-import Playground from './components/Playground.vue';
-
-import type { Database, SqlJsStatic } from 'sql.js';
+import { ref } from 'vue';
 import { onContentUpdated } from 'vitepress';
+import Playground from './components/Playground.vue';
+import { useData } from './composable/data';
 </script>
 
 <script lang="ts" setup>
@@ -13,72 +11,73 @@ const {
   frontmatter
 } = useData();
 
-const SQL = ref<SqlJsStatic | null>(null);
-const query = ref<string>(frontmatter.value.playground.query);
-const database = ref<Database | null>(null);
+const query = ref<string>('');
 
-onMounted(async() => {
-  const initSqlJs = (await import('sql.js')).default;
-  SQL.value = await initSqlJs({ locateFile: file => `https://sql.js.org/dist/${file}` });
-  storeDatabase();
-});
+const playgoundRef = ref<InstanceType<typeof Playground> | null>(null);
 
 onContentUpdated(() => {
   storeDatabase();
 });
 
 const storeDatabase = () => {
-  if (!SQL.value) return;
+  console.log(frontmatter.value.playground);
+  if (playgoundRef.value && playgoundRef.value.loading.now) return;
 
-  if (database) database.value?.close();
-  database.value = new SQL.value.Database();
-
-  if(frontmatter.value.playground && frontmatter.value.playground.preQuery) {
-    database.value.exec(frontmatter.value.playground.preQuery);
+  if(frontmatter.value.playground) {
+    if (frontmatter.value.playground.query)
+      query.value = frontmatter.value.playground.query;
+    if (frontmatter.value.playground.preQuery)
+      playgoundRef.value?.execQuery(frontmatter.value.playground.preQuery);
   }
 };
 
 </script>
 
 <template>
-  <Splitpanes class="root" vertical>
-    <Pane :size="10" class="navigation">
-      <aside>
-        <ul>
-          <li>SELECT FROM</li>
-          <li>WHERE</li>
-          <li>AND OR</li>
-          <li>etc...</li>
-        </ul>
-      </aside>
-    </Pane>
-    <Pane v-if="frontmatter.playground && database != null">
-      <Playground :database="database" v-model:query="query"></Playground>
-    </Pane>
-    <Pane class="vp-doc">
-      <Content />
-    </Pane>
-  </Splitpanes>
+  <div class="wrapper">
+    <Splitpanes class="root" vertical>
+      <Pane :size="10" class="navigation">
+        <aside>
+          <ul>
+            <li>SELECT FROM</li>
+            <li>WHERE</li>
+            <li>AND OR</li>
+            <li>etc...</li>
+          </ul>
+        </aside>
+      </Pane>
+      <Pane v-if="frontmatter.playground">
+        <Playground v-model:query="query" ref="playgoundRef" @loaded="() => storeDatabase()"></Playground>
+      </Pane>
+      <Pane class="vp-doc">
+        <Content />
+      </Pane>
+    </Splitpanes>
+  </div>
 </template>
 
 <style lang="scss" scoped>
-
-.splitpanes.root {
+.wrapper {
   width: 100vw;
   height: 100vh;
-  overflow: none;
 
-  .navigation {
-    width: 100%;
-    height: 100%;
+  .splitpanes.root {
+    overflow: none;
 
-    background-color: var(--vp-c-bg-alt);
-  }
+    .navigation {
+      width: 100%;
+      height: 100%;
 
-  .vp-doc {
-    font-size: 0.8rem;
-    padding: 1em;
-    overflow: scroll;
+      background-color: var(--vp-c-bg-alt);
+    }
+
+    .vp-doc {
+      font-size: 0.8rem;
+      padding: 1em;
+      overflow: scroll;
+    }
   }
 }
+
+
 </style>
