@@ -6,12 +6,15 @@ export default defineConfig({
   title: "SQLで〜たべ〜す",
   description: "データベースじっこー",
   vite: {
+    resolve: {
+      alias: {
+        'monaco-editor': `${process.cwd()}/node_modules/monaco-editor`,
+      }
+    },
     plugins: [
       (monacoEditorPlugin as any).default({
         languageWorkers: [],
-        customWorkers: [
-          { label: 'sql', entry: 'monaco-sql-languages/out/esm/sql/sql.worker' }
-        ]
+        globalAPI: true
       })
     ]
   },

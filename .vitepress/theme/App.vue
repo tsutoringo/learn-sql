@@ -3,13 +3,12 @@ import { Splitpanes, Pane } from 'splitpanes';
 import { useData } from './composable/data';
 import { onMounted, ref } from 'vue';
 import Playground from './components/Playground.vue';
-import initSqlJs, { Database, SqlJsStatic,  } from 'sql.js';
+
+import type { Database, SqlJsStatic } from 'sql.js';
 import { onContentUpdated } from 'vitepress';
 </script>
 
 <script lang="ts" setup>
-
-
 const {
   frontmatter
 } = useData();
@@ -19,6 +18,7 @@ const query = ref<string>(frontmatter.value.playground.query);
 const database = ref<Database | null>(null);
 
 onMounted(async() => {
+  const initSqlJs = (await import('sql.js')).default;
   SQL.value = await initSqlJs({ locateFile: file => `https://sql.js.org/dist/${file}` });
   storeDatabase();
 });
