@@ -68,9 +68,9 @@ const execQuery = (incomingQuery: string, silent: boolean = false) => {
   try {
     result = database.value.exec(incomingQuery);
     error = null;
-  } catch (error) {
+  } catch (cachedError) {
     result = [];
-    error = error.message;
+    error = cachedError.message;
   }
 
   if (!silent) {
