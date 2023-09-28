@@ -27,7 +27,7 @@ const storeDatabase = () => {
     if (frontmatter.value.playground.query)
       query.value = frontmatter.value.playground.query;
     if (frontmatter.value.playground.preQuery)
-      playgoundRef.value?.execQuery(frontmatter.value.playground.preQuery);
+      playgoundRef.value?.execQuery(frontmatter.value.playground.preQuery, true);
   }
 };
 

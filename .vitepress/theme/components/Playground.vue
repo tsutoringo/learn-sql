@@ -41,7 +41,6 @@ const {
   loading
 } = provideLoadingStatus();
 
-
 onMounted(() => {
   // TODO: Chainを作成する
   setLoadingStatus('MonacoEditorをセットアップ中');
@@ -60,16 +59,24 @@ onUnmounted(() => {
   database.value?.close();
 });
 
-const execQuery = (incomingQuery: string) => {
+const execQuery = (incomingQuery: string, silent: boolean = false) => {
   if (!database.value) throw new Error('Dont run query before complete setup.');
 
-  last.query = incomingQuery;
+  let result: QueryExecResult[] = [];
+  let error: string | null = '';
+
   try {
-    last.result = database.value.exec(last.query);
-    last.error = null;
+    result = database.value.exec(incomingQuery);
+    error = null;
   } catch (error) {
-    last.result = null;
-    last.error = error.message;
+    result = [];
+    error = error.message;
+  }
+
+  if (!silent) {
+    last.query = incomingQuery;
+    last.result = result;
+    last.error = error;
   }
 }
 
@@ -83,7 +90,7 @@ defineExpose({
 <template>
   <div class="playground">
     <template v-if="loading.now">
-
+      {{ loading.status }}
     </template>
     <template v-else>
       <Splitpanes horizontal>
