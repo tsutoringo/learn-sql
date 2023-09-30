@@ -57,10 +57,7 @@ const usePlaygroundStuff = () => {
   }
 
   const execQuery = (incomingQuery: string, silent: boolean = false) => {
-    if (!database) {
-      queue.push([incomingQuery, silent]);
-      return;
-    };
+    if (!database) throw new PlaygroundError('Dont exeQuery before complete setupStuff.')
   
     let result: QueryExecResult[] = [];
     let error: string | null = '';
