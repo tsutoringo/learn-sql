@@ -9,7 +9,7 @@ const props = defineProps<{
 }>();
 
 const imActive = computed(() => isActiveLink(props.href));
-const target = computed(() => props.target || guessLinkTarget(props.href));
+const target = computed(() => props.target || (typeof window !== 'undefined' ? guessLinkTarget(props.href) : undefined));
 
 </script>
 
