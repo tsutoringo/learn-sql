@@ -34,22 +34,17 @@ export default defineConfig({
       {
         text: 'はじめに',
         items: [
-          { text: 'ガイド', link: '/' },
-          { text: 'Today', link: '/today' }
+          { text: 'ことサイトの使い方', link: '/introduction/how-to-use' },
         ]
       },
       {
         text: 'クエリ一覧',
         items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' }
         ]
       },
       {
         text: 'その他',
         items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' }
         ]
       }
     ],
