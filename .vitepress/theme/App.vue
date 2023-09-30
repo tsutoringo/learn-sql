@@ -38,7 +38,7 @@ const storeDatabase = () => {
 <template>
   <div class="wrapper">
     <Splitpanes class="root" vertical>
-      <Pane :size="10" class="navigation">
+      <Pane :size="20" class="navigation">
         <AsideNav />
       </Pane>
       <Pane>
@@ -73,6 +73,7 @@ const storeDatabase = () => {
     .vp-doc {
       font-size: 0.8rem;
       padding: 1em;
+      padding-left: 2.2em;
       overflow: scroll;
     }
   }
