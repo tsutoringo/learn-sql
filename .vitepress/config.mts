@@ -3,6 +3,7 @@ import { default as monacoEditorPlugin } from 'vite-plugin-monaco-editor';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
+  lang: 'ja',
   title: "SQLで〜たべ〜す",
   description: "データベースじっこー",
   vite: {
