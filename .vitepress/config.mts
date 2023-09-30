@@ -46,6 +46,7 @@ export default defineConfig({
       {
         text: 'その他',
         items: [
+          { 'text': 'GitHub', link: 'https://github.com/tsutoringo/learn-sql' }
         ]
       }
     ],
