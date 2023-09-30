@@ -3,10 +3,6 @@ import { Editor } from '@guolao/vue-monaco-editor';
 import { Splitpanes, Pane } from 'splitpanes';
 import { computed, onBeforeMount, onMounted, onUnmounted, reactive, ref } from 'vue';
 import type { Database, QueryExecResult, SqlJsStatic } from 'sql.js';
-
-import { setupMonacoEditor } from '../composable/setupMonacoEditor';
-import { setupSql } from '../composable/setupSql';
-import { provideLoadingStatus } from '../composable/loadingStatus';
 import { GSymbol } from 'vue-material-symbols';
 import { injectPlaygroundStuff } from '../composable/usePlaygroundStuff';
 
@@ -37,8 +33,6 @@ const last = reactive<{
 });
 
 const {
-  setLoadingStatus,
-  endLoading,
   loading,
   loaded,
   sql,
