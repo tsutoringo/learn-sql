@@ -5,6 +5,7 @@ import { onContentUpdated } from 'vitepress';
 import Playground from './components/Playground.vue';
 import { useData } from './composable/data';
 import AsideNav from './components/AsideNav.vue';
+import { providePlaygroundStuff } from './composable/usePlaygroundStuff';
 </script>
 
 <script lang="ts" setup>
@@ -12,8 +13,9 @@ const {
   frontmatter
 } = useData();
 
-const query = ref<string>('');
+providePlaygroundStuff();
 
+const query = ref<string>('');
 const playgoundRef = ref<InstanceType<typeof Playground> | null>(null);
 
 onContentUpdated(() => {

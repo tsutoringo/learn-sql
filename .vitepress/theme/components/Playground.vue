@@ -1,19 +1,19 @@
 <script lang="ts" setup>
 import { Editor } from '@guolao/vue-monaco-editor';
 import { Splitpanes, Pane } from 'splitpanes';
-import { computed, onMounted, onUnmounted, reactive, ref } from 'vue';
+import { computed, onBeforeMount, onMounted, onUnmounted, reactive, ref } from 'vue';
 import type { Database, QueryExecResult, SqlJsStatic } from 'sql.js';
 
 import { setupMonacoEditor } from '../composable/setupMonacoEditor';
 import { setupSql } from '../composable/setupSql';
 import { provideLoadingStatus } from '../composable/loadingStatus';
 import { GSymbol } from 'vue-material-symbols';
+import { injectPlaygroundStuff } from '../composable/usePlaygroundStuff';
 
 const props = defineProps<{
   query: string
 }>();
 
-const sql = ref<SqlJsStatic | null>(null);
 const database = ref<Database | null>(null);
 
 const emit = defineEmits<{
@@ -39,21 +39,22 @@ const last = reactive<{
 const {
   setLoadingStatus,
   endLoading,
-  loading
-} = provideLoadingStatus();
+  loading,
+  loaded,
+  sql,
+  setupStuff
+} = injectPlaygroundStuff();
 
-onMounted(() => {
-  // TODO: Chainを作成する
-  setLoadingStatus('MonacoEditorをセットアップ中');
-  setupMonacoEditor().then(() => {
-    setLoadingStatus('SQLをセットアップ中');
-    return setupSql();
-  }).then((loadedSql) => {
-    sql.value = loadedSql;
+onBeforeMount(() => {
+  if (loaded.value && sql.value) {
     database.value = new sql.value.Database();
-    endLoading();
     emit('loaded');
-  });
+  } else {
+    setupStuff().then((sql) => {
+      database.value = new sql.Database();
+      emit('loaded');
+    });
+  }
 });
 
 onUnmounted(() => {
