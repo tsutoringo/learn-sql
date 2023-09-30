@@ -13,26 +13,28 @@ const {
   frontmatter
 } = useData();
 
-providePlaygroundStuff();
+const {
+  setupStuff,
+  setDatabase,
+  execQuery
+} = providePlaygroundStuff();
 
 const query = ref<string>('');
-const playgoundRef = ref<InstanceType<typeof Playground> | null>(null);
 
 onContentUpdated(() => {
-  storeDatabase();
+  setupStuff()
+    .then(() => setDatabase())
+    .then(() => initDatabase())
 });
 
-const storeDatabase = () => {
-  if (playgoundRef.value && playgoundRef.value.loading.now) return;
-
+const initDatabase = () => {
   if(frontmatter.value.playground) {
     if (frontmatter.value.playground.query)
       query.value = frontmatter.value.playground.query;
     if (frontmatter.value.playground.preQuery)
-      playgoundRef.value?.execQuery(frontmatter.value.playground.preQuery, true);
+      execQuery(frontmatter.value.playground.preQuery, true);
   }
 };
-
 </script>
 
 <template>
@@ -44,7 +46,7 @@ const storeDatabase = () => {
       <Pane>
         <Splitpanes class="root" vertical>
           <Pane v-if="frontmatter.playground">
-            <Playground v-model:query="query" ref="playgoundRef" @loaded="() => storeDatabase()"></Playground>
+            <Playground v-model:query="query"></Playground>
           </Pane>
           <Pane class="vp-doc">
             <Content />

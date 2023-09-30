@@ -1,9 +1,12 @@
-import { InjectionKey, provide, ref } from 'vue';
+import { InjectionKey, provide, reactive, ref } from 'vue';
 import { useLoadingStatus } from './loadingStatus';
 import { setupSql } from './setupSql';
 import { setupMonacoEditor } from './setupMonacoEditor';
-import type { SqlJsStatic } from 'sql.js';
+import type { Database, QueryExecResult, SqlJsStatic } from 'sql.js';
 import { safeInject } from '@tsutoringo/vue-utils';
+
+class PlaygroundError extends Error {
+}
 
 const usePlaygroundStuff = () => {
   const {
@@ -13,31 +16,79 @@ const usePlaygroundStuff = () => {
     loaded
   } = useLoadingStatus();
 
-  const sql = ref<SqlJsStatic | null>(null);
+  let sql: SqlJsStatic | null = null;
+  let database: Database | null = null;
+  const queue: [incomingQuery: string, silent: boolean][] = [];
 
-  const setupStuff = async (): Promise<SqlJsStatic> => {
+  const last = reactive<{
+    result: QueryExecResult[] | null,
+    query: string,
+    error: string | null
+  }>({
+    result: null,
+    query: '',
+    error: null
+  });
+
+  const setupStuff = async (): Promise<void> => {
     if (!loaded.value) {
       setLoadingStatus('MonacoEditorをセットアップ中...');
       await setupMonacoEditor();
     }
 
-    if (!sql.value) {
+    if (!sql) {
       setLoadingStatus('SQLをセットアップ中...');
-      sql.value = await setupSql();
+      sql = await setupSql();
     }
 
     endLoading();
+  }
 
-    return sql.value;
+  const setDatabase = () => {
+    if (database) {
+      database.close();
+    }
+
+    if (!sql) {
+      throw new PlaygroundError('Dont setup database before complete setupStuff.');
+    }
+
+    database = new sql.Database();
+  }
+
+  const execQuery = (incomingQuery: string, silent: boolean = false) => {
+    if (!database) {
+      queue.push([incomingQuery, silent]);
+      return;
+    };
+  
+    let result: QueryExecResult[] = [];
+    let error: string | null = '';
+  
+    try {
+      result = database.exec(incomingQuery);
+      error = null;
+    } catch (cachedError) {
+      result = [];
+      error = cachedError.message;
+    }
+  
+    if (!silent) {
+      last.query = incomingQuery;
+      last.result = result;
+      last.error = error;
+    }
   }
 
   return {
-    sql,
     setLoadingStatus,
     endLoading,
     loading,
     loaded,
-    setupStuff
+    setupStuff,
+    setDatabase,
+    last,
+    execQuery
   };
 };
 

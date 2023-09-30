@@ -13,8 +13,7 @@ const props = defineProps<{
 const database = ref<Database | null>(null);
 
 const emit = defineEmits<{
-  'update:query': [ value: string ],
-  loaded: []
+  'update:query': [ value: string ]
 }>();
 
 const query = computed<string>({
@@ -22,64 +21,11 @@ const query = computed<string>({
   set: (v) => emit('update:query', v)
 });
 
-const last = reactive<{
-  result: QueryExecResult[] | null,
-  query: string,
-  error: string | null
-}>({
-  result: null,
-  query: '',
-  error: null
-});
-
 const {
   loading,
-  loaded,
-  sql,
-  setupStuff
-} = injectPlaygroundStuff();
-
-onBeforeMount(() => {
-  if (loaded.value && sql.value) {
-    database.value = new sql.value.Database();
-    emit('loaded');
-  } else {
-    setupStuff().then((sql) => {
-      database.value = new sql.Database();
-      emit('loaded');
-    });
-  }
-});
-
-onUnmounted(() => {
-  database.value?.close();
-});
-
-const execQuery = (incomingQuery: string, silent: boolean = false) => {
-  if (!database.value) throw new Error('Dont run query before complete setup.');
-
-  let result: QueryExecResult[] = [];
-  let error: string | null = '';
-
-  try {
-    result = database.value.exec(incomingQuery);
-    error = null;
-  } catch (cachedError) {
-    result = [];
-    error = cachedError.message;
-  }
-
-  if (!silent) {
-    last.query = incomingQuery;
-    last.result = result;
-    last.error = error;
-  }
-}
-
-defineExpose({
-  loading,
+  last,
   execQuery
-});
+} = injectPlaygroundStuff();
 
 </script>
 
