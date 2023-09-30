@@ -18,6 +18,11 @@ export default defineConfig({
       })
     ]
   },
+  head: [
+    ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
+    ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', 'crossorigin': ''}],
+    ['link', { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;200;300;400;500;600;700;800;900&display=swap' }]
+  ],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
@@ -27,7 +32,21 @@ export default defineConfig({
 
     sidebar: [
       {
-        text: 'Examples',
+        text: 'はじめに',
+        items: [
+          { text: 'ガイド', link: '/' },
+          { text: 'Today', link: '/today' }
+        ]
+      },
+      {
+        text: 'クエリ一覧',
+        items: [
+          { text: 'Markdown Examples', link: '/markdown-examples' },
+          { text: 'Runtime API Examples', link: '/api-examples' }
+        ]
+      },
+      {
+        text: 'その他',
         items: [
           { text: 'Markdown Examples', link: '/markdown-examples' },
           { text: 'Runtime API Examples', link: '/api-examples' }

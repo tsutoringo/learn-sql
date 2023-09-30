@@ -4,6 +4,7 @@ import { ref } from 'vue';
 import { onContentUpdated } from 'vitepress';
 import Playground from './components/Playground.vue';
 import { useData } from './composable/data';
+import AsideNav from './components/AsideNav.vue';
 </script>
 
 <script lang="ts" setup>
@@ -20,7 +21,6 @@ onContentUpdated(() => {
 });
 
 const storeDatabase = () => {
-  console.log(frontmatter.value.playground);
   if (playgoundRef.value && playgoundRef.value.loading.now) return;
 
   if(frontmatter.value.playground) {
@@ -37,14 +37,7 @@ const storeDatabase = () => {
   <div class="wrapper">
     <Splitpanes class="root" vertical>
       <Pane :size="10" class="navigation">
-        <aside>
-          <ul>
-            <li>SELECT FROM</li>
-            <li>WHERE</li>
-            <li>AND OR</li>
-            <li>etc...</li>
-          </ul>
-        </aside>
+        <AsideNav />
       </Pane>
       <Pane>
         <Splitpanes class="root" vertical>
