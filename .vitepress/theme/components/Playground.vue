@@ -96,9 +96,9 @@ defineExpose({
               <Editor v-model:value="query" language="sql" theme="vs-dark" />
             </Pane>
           </Splitpanes>
-          <div class="run-btn" @click="() => execQuery(query)">
+          <button title="実行" class="run-btn" @click="() => execQuery(query)">
             <GSymbol icon="play_arrow" fill></GSymbol>
-          </div>
+          </button>
         </Pane>
         <Pane class="vp-doc result">
           <div>
