@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { computed, onBeforeMount, onMounted, ref } from 'vue';
 import { isActiveLink } from '../composable/isActiveLink';
 import { guessLinkTarget } from '../util/URL';
 
@@ -9,7 +9,13 @@ const props = defineProps<{
 }>();
 
 const imActive = computed(() => isActiveLink(props.href));
-const target = computed(() => props.target || (typeof window !== 'undefined' ? guessLinkTarget(props.href) : undefined));
+const target = ref<string | undefined>('');
+
+onMounted(() => {
+  if(!target.value) {
+    target.value = guessLinkTarget(props.href);
+  }
+});
 
 </script>
 
