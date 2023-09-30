@@ -14,7 +14,8 @@
     "splitpanes": "^3.1.5",
     "sql.js": "^1.8.0",
     "vitepress": "1.0.0-rc.20",
-    "vue": "^3.3.4"
+    "vue": "^3.3.4",
+    "vue-material-symbols": "^1.0.0"
   },
   "devDependencies": {
     "@types/splitpanes": "^2.2.2",

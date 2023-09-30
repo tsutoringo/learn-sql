@@ -35,6 +35,9 @@ dependencies:
   vue:
     specifier: ^3.3.4
     version: 3.3.4
+  vue-material-symbols:
+    specifier: ^1.0.0
+    version: 1.0.0
 
 devDependencies:
   '@types/splitpanes':
@@ -1298,6 +1301,10 @@ packages:
         optional: true
     dependencies:
       vue: 3.3.4
+    dev: false
+
+  /vue-material-symbols@1.0.0:
+    resolution: {integrity: sha512-fdjj1tyfym5o1V94WNuU47eXArkEI1R2RKY8/n7DExEt6AvEuLQzy1YSDGGaBMvDUhNWZ9/QYLUXBcal3vTRXg==}
     dev: false
 
   /vue@2.7.14:
