@@ -1,17 +1,20 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { isActiveLink } from '../composable/isActiveLink'
+import { isActiveLink } from '../composable/isActiveLink';
+import { guessLinkTarget } from '../util/URL';
 
 const props = defineProps<{
   href: string
+  target?: string
 }>();
 
-const imActive = computed(() => isActiveLink(props.href))
+const imActive = computed(() => isActiveLink(props.href));
+const target = computed(() => props.target || guessLinkTarget(props.href));
 
 </script>
 
 <template>
-  <a :href="props.href" :class="{ active: imActive }"><slot></slot></a>
+  <a :href="props.href" :target="target" :class="{ active: imActive }"><slot></slot></a>
 </template>
 
 <style lang="scss" scoped>
