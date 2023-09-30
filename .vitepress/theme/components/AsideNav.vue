@@ -1,13 +1,10 @@
 <script lang="ts" setup>
-import { toRaw } from 'vue';
 import { useData } from '../composable/data';
 import NavGroup from './NavGroup.vue';
 import NavGroupItem from './NavGroupItem.vue';
 import VPLink from './VPLink.vue';
 
 const { theme } = useData();
-
-console.log(toRaw(theme.value.sidebar))
 </script>
 
 <template>
