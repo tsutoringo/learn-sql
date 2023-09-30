@@ -1,7 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
 
-const collpase = ref<boolean>(true);
 </script>
 <template>
   <section class="nav-group expansible">
