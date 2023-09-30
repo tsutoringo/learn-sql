@@ -35,7 +35,7 @@ export default defineConfig({
       {
         text: 'はじめに',
         items: [
-          { text: 'ことサイトの使い方', link: '/introduction/how-to-use' },
+          { text: 'このサイトの使い方', link: '/introduction/how-to-use' },
         ]
       },
       {
