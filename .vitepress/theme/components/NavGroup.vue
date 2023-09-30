@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-
+import { GSymbol } from 'vue-material-symbols';
 </script>
 <template>
   <section class="nav-group expansible">
     <details open>
       <summary>
-        <hgroup>
-          <h2><slot name="title"></slot></h2>
+        <hgroup class="title">
+          <h2><slot name="title"></slot></h2><div class="arrow"><GSymbol icon="chevron_right" /></div>
         </hgroup>
       </summary>
       <div class="items">
@@ -26,7 +26,8 @@
   }
   details {
     padding: 0.8em 0;
-    summary {
+
+    > summary {
       display: block;
       padding: 0.4em 0;
       cursor: pointer;
@@ -41,6 +42,24 @@
         text-overflow: ellipsis;
         white-space: nowrap;
       }
+
+      .title {
+        display: flex;
+        
+        > .arrow {
+          margin-left: auto;
+          display: flex;
+          align-items: center;
+          user-select: none;
+
+          transition: 0.2s;
+          transform: rotate(0);
+        }
+      }
+    }
+
+    &[open] > summary .title .arrow {
+      transform: rotate(90deg);
     }
   }
 }
