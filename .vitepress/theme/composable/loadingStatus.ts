@@ -1,4 +1,4 @@
-import { InjectionKey, provide, reactive, ref } from 'vue';
+import { InjectionKey, computed, provide, reactive, ref } from 'vue';
 import { safeInject } from '@tsutoringo/vue-utils';
 
 export const useLoadingStatus = () => {
@@ -10,6 +10,8 @@ export const useLoadingStatus = () => {
     status: '',
     now: true
   });
+
+  const loaded = computed(() => !loading.now);
 
   const setLoadingStatus = (t: string) => {
     loading.now = true;
@@ -24,7 +26,8 @@ export const useLoadingStatus = () => {
   return {
     setLoadingStatus,
     endLoading,
-    loading
+    loading,
+    loaded
   };
 };
 
