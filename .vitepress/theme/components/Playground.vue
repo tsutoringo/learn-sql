@@ -7,6 +7,7 @@ import type { Database, QueryExecResult, SqlJsStatic } from 'sql.js';
 import { setupMonacoEditor } from '../composable/setupMonacoEditor';
 import { setupSql } from '../composable/setupSql';
 import { provideLoadingStatus } from '../composable/loadingStatus';
+import { GSymbol } from 'vue-material-symbols';
 
 const props = defineProps<{
   query: string
@@ -101,7 +102,7 @@ defineExpose({
             </Pane>
           </Splitpanes>
           <div class="run-btn" @click="() => execQuery(query)">
-            <span>▶</span>
+            <GSymbol icon="play_arrow" fill></GSymbol>
           </div>
         </Pane>
         <Pane class="vp-doc result">
@@ -161,6 +162,12 @@ defineExpose({
       cursor: pointer;
 
       border-radius: 10px;
+
+      transition: 0.4s;
+
+      &:hover {
+        color: var(--vp-c-brand-1);
+      }
     }
 
   }
