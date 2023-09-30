@@ -109,7 +109,7 @@ defineExpose({
         <Pane class="vp-doc result">
           <div>
             <h3>実行内容</h3>
-              {{ last.query }}
+              <pre>{{ last.query }}</pre>
             <template v-if="last.result">
               <h3>Result</h3>
               <table v-for="table of last.result">
