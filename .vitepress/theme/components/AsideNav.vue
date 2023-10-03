@@ -34,7 +34,7 @@ const { theme } = useData();
     .nav-group-item {
       a {
         display: block;
-        padding: 0.2em 0;
+        padding: 0.3em 0;
 
         color: var(--vp-c-text-2);
 

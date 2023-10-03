@@ -29,7 +29,7 @@ import { GSymbol } from 'vue-material-symbols';
 
     > summary {
       display: block;
-      padding: 0.4em 0;
+      padding: 0.5em 0;
       cursor: pointer;
       
       &::-webkit-details-marker {
