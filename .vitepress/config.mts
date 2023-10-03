@@ -44,6 +44,8 @@ export default defineConfig({
       {
         text: 'その他',
         items: [
+          { 'text': 'Markdwon Examples', link: '/vitepress/markdown-examples' },
+          { 'text': 'API Examples', link: '/vitepress/api-examples' },
           { 'text': 'GitHub', link: 'https://github.com/tsutoringo/learn-sql' }
         ]
       }
