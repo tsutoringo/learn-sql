@@ -1,10 +1,11 @@
 <script lang="ts" setup>
 import { Editor } from '@guolao/vue-monaco-editor';
 import { Splitpanes, Pane } from 'splitpanes';
-import { computed, onBeforeMount, onMounted, onUnmounted, reactive, ref } from 'vue';
+import { computed, ref } from 'vue';
 import type { Database, QueryExecResult, SqlJsStatic } from 'sql.js';
 import { GSymbol } from 'vue-material-symbols';
 import { injectPlaygroundStuff } from '../composable/usePlaygroundStuff';
+import DateContainer from './DateContainer.vue';
 
 const props = defineProps<{
   query: string
@@ -48,7 +49,7 @@ const {
         </Pane>
         <Pane class="vp-doc result">
           <div>
-            <h3>実行内容</h3>
+            <h3>実行内容 <small><DateContainer v-if="last.time" :time="last.time"/></small></h3>
               <pre>{{ last.query }}</pre>
             <template v-if="last.result">
               <h3>Result</h3>

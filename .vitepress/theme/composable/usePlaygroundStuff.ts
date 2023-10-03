@@ -4,6 +4,7 @@ import { setupSql } from './setupSql';
 import { setupMonacoEditor } from './setupMonacoEditor';
 import type { Database, QueryExecResult, SqlJsStatic } from 'sql.js';
 import { safeInject } from '@tsutoringo/vue-utils';
+import { DateTime } from 'luxon';
 
 class PlaygroundError extends Error {
 }
@@ -23,11 +24,13 @@ const usePlaygroundStuff = () => {
   const last = reactive<{
     result: QueryExecResult[] | null,
     query: string,
-    error: string | null
+    error: string | null,
+    time: DateTime | null
   }>({
     result: null,
     query: '',
-    error: null
+    error: null,
+    time: null
   });
 
   const setupStuff = async (): Promise<void> => {
@@ -74,6 +77,7 @@ const usePlaygroundStuff = () => {
       last.query = incomingQuery;
       last.result = result;
       last.error = error;
+      last.time = DateTime.now();
     }
   }
 
