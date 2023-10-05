@@ -9,7 +9,7 @@ const { theme } = useData();
 
 <template>
   <aside class="aside-nav">
-    <div class="logo">g</div>
+    <div class="logo"><VPLink href="/">SQL Learn </VPLink></div>
     <nav v-if="theme.sidebar && Array.isArray(theme.sidebar)">
       <NavGroup v-for="group in theme.sidebar">
         <template #title>{{ group.text }}</template>
@@ -29,6 +29,11 @@ const { theme } = useData();
   height: 100%;
 
   padding: 1.2em;
+  
+  .logo {
+    font-size: 1.6em;
+    font-weight: 700;
+  }
 
   .nav-group {
     .nav-group-item {
