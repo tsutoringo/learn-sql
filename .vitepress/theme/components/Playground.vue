@@ -6,6 +6,8 @@ import type { Database, QueryExecResult, SqlJsStatic } from 'sql.js';
 import { GSymbol } from 'vue-material-symbols';
 import { injectPlaygroundStuff } from '../composable/usePlaygroundStuff';
 import DateContainer from './DateContainer.vue';
+import * as Tabs from './Tabs/';
+import SQLResultTable from './SQL/SQLResultTable.vue';
 
 const props = defineProps<{
   query: string
@@ -48,35 +50,30 @@ const {
           </button>
         </Pane>
         <Pane class="vp-doc result">
-          <div>
+          <Tabs.Main>
+            <Tabs.Tab>
+              <Tabs.Title>実行結果</Tabs.Title>
+              <template #content>
+                <SQLResultTable v-if="last.result" :result="last.result" />
+              </template>
+            </Tabs.Tab>
+            <Tabs.Tab>
+              <Tabs.Title>Explain</Tabs.Title>
+              <template #content>
+                Coming soon
+              </template>
+            </Tabs.Tab>
+          </Tabs.Main>
+          <!-- <div>
             <h3>実行内容 <small><DateContainer v-if="last.time" :time="last.time"/></small></h3>
               <pre>{{ last.query }}</pre>
             <template v-if="last.result">
-              <h3>Result</h3>
-              <table v-for="table of last.result">
-                <thead>
-                  <th v-for="column in table.columns">
-                    {{ column }}
-                  </th>
-                </thead>
-                <tbody>
-                  <template v-for="value in table.values">
-                    <tr>
-                      <template v-if="Array.isArray(value)" v-for="data of value">
-                        <td>
-                          {{ data }}
-                        </td>
-                      </template>
-                    </tr>
-                  </template>
-                </tbody>
-              </table>
             </template>
             <template v-if="last.error">
               <h3>エラー</h3>
               {{ last.error }}
             </template>
-          </div>
+          </div> -->
         </Pane>
       </Splitpanes>
     </template>
@@ -115,7 +112,6 @@ const {
   }
 
   .result {
-    padding: 1em;
     height: 100;
     overflow: scroll;
   }

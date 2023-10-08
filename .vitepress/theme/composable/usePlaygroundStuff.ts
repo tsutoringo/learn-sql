@@ -93,7 +93,7 @@ const usePlaygroundStuff = () => {
   };
 };
 
-export type usePlaygroundStuffStore = ReturnType<typeof usePlaygroundStuff>;
-export const usePlaygroundStuffInjectionKey: InjectionKey<usePlaygroundStuffStore> = Symbol('playground');
+export type UsePlaygroundStuffStore = ReturnType<typeof usePlaygroundStuff>;
+export const usePlaygroundStuffInjectionKey: InjectionKey<UsePlaygroundStuffStore> = Symbol('playground');
 export const injectPlaygroundStuff = () => safeInject(usePlaygroundStuffInjectionKey);
 export const providePlaygroundStuff = () => (m => (provide(usePlaygroundStuffInjectionKey, m),m))(usePlaygroundStuff());
